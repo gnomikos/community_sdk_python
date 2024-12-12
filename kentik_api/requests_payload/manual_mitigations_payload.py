@@ -110,13 +110,11 @@ class GetActiveAlertsResponse(List[_Alarm]):
 @dataclass
 class _HistoricalAlert:
     row_type: str
-    old_alarm_state: str
-    new_alarm_state: str
-    alert_match_count: str
+    alert_match_count: int
     alert_severity: str
     alert_id: int
     threshold_id: Optional[int]
-    alarm_id: int
+    alarm_id: str
     alert_key: str
     alert_dimension: str
     alert_metric: List[str]
@@ -127,8 +125,7 @@ class _HistoricalAlert:
     baseline_used: int
     learning_mode: int
     debug_mode: int
-    ctime: str
-    alarm_start_time: str
+    alarm_start: str
     comment: Optional[str]
     mitigation_id: Optional[int]
     mit_method_id: int
@@ -140,13 +137,9 @@ class _HistoricalAlert:
 
     def to_alert(self) -> HistoricalAlert:
         d = deepcopy(self.__dict__)
-        d.pop("ctime")
+        
         d["learning_mode"] = self.learning_mode != 0
         d["debug_mode"] = self.debug_mode != 0
-
-        d["creation_time"] = datetime.fromisoformat(self.ctime.replace("Z", "+00:00"))
-        d["alarm_start_time"] = datetime.fromisoformat(self.alarm_start_time + "+00:00")
-
         d["alert_id"] = convert(d["alert_id"], ID)
         d["threshold_id"] = convert_or_none(d["threshold_id"], ID)
         d["alarm_id"] = convert(d["alarm_id"], ID)
@@ -154,7 +147,7 @@ class _HistoricalAlert:
         d["mit_method_id"] = convert(d["mit_method_id"], ID)
         d["id"] = convert(d["id"], ID)
         d["policy_id"] = convert(d["policy_id"], ID)
-
+        
         return from_dict(data_class=HistoricalAlert, data=d)
 
 
