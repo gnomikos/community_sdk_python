@@ -51,9 +51,7 @@ class Alarm:
 @dataclass
 class HistoricalAlert:
     row_type: str
-    old_alarm_state: str
-    new_alarm_state: str
-    alert_match_count: str
+    alert_match_count: int
     alert_severity: str
     alert_id: ID
     threshold_id: Optional[ID]
@@ -68,8 +66,7 @@ class HistoricalAlert:
     baseline_used: float
     learning_mode: bool
     debug_mode: bool
-    creation_time: datetime
-    alarm_start_time: datetime
+    alarm_start: str
     comment: Optional[str]
     mitigation_id: Optional[ID]
     mit_method_id: ID
